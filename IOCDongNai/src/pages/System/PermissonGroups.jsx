@@ -100,7 +100,7 @@ function PermissonGroups() {
       {/* Page Title */}
       <div
         className={`px-4 py-2 ${
-          isOpen ? "ml-64" : "ml-0"
+          isOpen ? "sm:ml-64" : "ml-0"
         } transition-[margin] duration-300`}
       >
         <h2 className="text-md font-semibold text-red-700">
@@ -109,12 +109,12 @@ function PermissonGroups() {
       </div>
       <div
         className={`px-3 transition-[margin] duration-300 ${
-          isOpen ? "ml-64" : "ml-0"
+          isOpen ? "sm:ml-64" : "ml-0"
         }`}
       >
         {/* Search + Add toolbar in one row */}
-        <div className="flex items-start gap-2 mb-2">
-          <div className="flex-1">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-2 mb-2">
+          <div className="flex-1 min-w-0">
             <Search
               fields={[
                 {
@@ -177,7 +177,7 @@ function PermissonGroups() {
       />
       <ConfirmModal
         open={showConfirmModal}
-        onClose={() => setShowConfirmModal(false)}
+        onClose={() => setShowFormModal(false)}
         onConfirm={handleDelete}
         message="Bạn có chắc chắn muốn xóa nhóm quyền này không?"
       />

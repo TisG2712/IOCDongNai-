@@ -35,16 +35,24 @@ function Sidebar() {
 
   return (
     <>
-      {/* Panel below navbar - Yellow theme harmonized */}
+      {/* Backdrop on mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 sm:hidden"
+          onClick={closeSidebar}
+        />
+      )}
+
+      {/* Panel below navbar */}
       <aside
         ref={panelRef}
-        className={`fixed left-0 w-64 bg-yellow-200 shadow-xl transform transition-transform z-50 flex flex-col ${
+        className={`fixed left-0 w-[80%] max-w-[260px] sm:w-64 bg-yellow-200 shadow-xl transform transition-transform z-50 flex flex-col ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{ top: topOffset, height: `calc(100vh - ${topOffset}px)` }}
       >
         <div className="flex items-center justify-between px-4 py-3 border-b border-amber-400 bg-amber-100/60">
-          <h3 className="text-xs font-semibold text-red-700 tracking-wide">
+          <h3 className="text-xs font-semibold text-red-700 tracking-wide truncate">
             {title}
           </h3>
           <button

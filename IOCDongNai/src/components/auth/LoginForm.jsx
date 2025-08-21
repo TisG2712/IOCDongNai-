@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -10,6 +11,14 @@ const LoginForm = () => {
   const [notification, setNotification] = useState(null);
   const [fadeOut, setFadeOut] = useState(false);
   const navigate = useNavigate();
+  const { login, isLoggedIn, isLoading } = useAuth();
+
+  // Redirect nếu đã đăng nhập
+  useEffect(() => {
+    if (!isLoading && isLoggedIn) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isLoggedIn, isLoading, navigate]);
 
   // Tự động ẩn notification sau vài giây
   useEffect(() => {
@@ -20,6 +29,8 @@ const LoginForm = () => {
         setTimeout(() => {
           setNotification(null);
           if (notification.type === "success") {
+            // Sử dụng login function từ useAuth hook
+            login(username);
             navigate("/dashboard"); // chuyển hướng khi login thành công
           }
         }, 500); // thời gian fade out
@@ -27,7 +38,7 @@ const LoginForm = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [notification, navigate]);
+  }, [notification, navigate, username, login]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,6 +60,23 @@ const LoginForm = () => {
       });
     }
   };
+
+  // Hiển thị loading nếu đang kiểm tra trạng thái đăng nhập
+  if (isLoading) {
+    return (
+      <div className="w-full md:w-1/2 flex items-center justify-center p-8 relative">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Đang tải...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Không hiển thị form nếu đã đăng nhập
+  if (isLoggedIn) {
+    return null;
+  }
 
   return (
     <div className="w-full md:w-1/2 flex items-center justify-center p-8 relative">

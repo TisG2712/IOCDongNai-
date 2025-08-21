@@ -4,12 +4,27 @@ import { FaTimes } from "react-icons/fa";
 function UserGroupFormModal({ open, onClose, onSave, editingGroup }) {
   const [form, setForm] = useState({
     tenNhom: "",
-    maNhom: "",
+    moTa: "",
     donViHanhChinh: "",
     nhomQuyen: [],
     kichHoat: true,
-    ghiChu: "",
   });
+
+  const [unitOptions, setUnitOptions] = useState([]);
+
+  useEffect(() => {
+    // Load danh sách đơn vị hành chính từ localStorage mỗi khi mở modal
+    try {
+      const raw = localStorage.getItem("unitCategories") || "[]";
+      const list = JSON.parse(raw);
+      const options = list
+        .filter((item) => item && item.tenNhom)
+        .map((item) => ({ value: item.tenNhom, label: item.tenNhom }));
+      setUnitOptions(options);
+    } catch (e) {
+      setUnitOptions([]);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (editingGroup)
@@ -21,11 +36,10 @@ function UserGroupFormModal({ open, onClose, onSave, editingGroup }) {
     else
       setForm({
         tenNhom: "",
-        maNhom: "",
+        moTa: "",
         donViHanhChinh: "",
-        nhomQuyen: "",
+        nhomQuyen: [],
         kichHoat: true,
-        ghiChu: "",
       });
   }, [editingGroup, open]);
 
@@ -68,22 +82,32 @@ function UserGroupFormModal({ open, onClose, onSave, editingGroup }) {
             />
           </div>
           <div>
-            <label className="block mb-1 font-medium">Mã nhóm</label>
-            <input
-              className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-1 focus:ring-gray-300"
-              value={form.maNhom}
-              onChange={(e) => setForm({ ...form, maNhom: e.target.value })}
-            />
-          </div>
-          <div>
             <label className="block mb-1 font-medium">Đơn vị hành chính</label>
-            <input
-              className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-1 focus:ring-gray-300"
-              value={form.donViHanhChinh}
-              onChange={(e) =>
-                setForm({ ...form, donViHanhChinh: e.target.value })
-              }
-            />
+            {unitOptions.length > 0 ? (
+              <select
+                className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-1 focus:ring-gray-300 bg-white"
+                value={form.donViHanhChinh}
+                onChange={(e) =>
+                  setForm({ ...form, donViHanhChinh: e.target.value })
+                }
+              >
+                <option value="">Chọn đơn vị hành chính</option>
+                {unitOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-1 focus:ring-gray-300"
+                value={form.donViHanhChinh}
+                onChange={(e) =>
+                  setForm({ ...form, donViHanhChinh: e.target.value })
+                }
+                placeholder="Chưa có dữ liệu đơn vị hành chính"
+              />
+            )}
           </div>
           <div>
             <label className="block mb-1 font-medium">Nhóm quyền</label>
@@ -155,11 +179,11 @@ function UserGroupFormModal({ open, onClose, onSave, editingGroup }) {
             </div>
           </div>
           <div>
-            <label className="block mb-1 font-medium">Ghi chú</label>
+            <label className="block mb-1 font-medium">Mô tả</label>
             <input
               className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-1 focus:ring-gray-300"
-              value={form.ghiChu}
-              onChange={(e) => setForm({ ...form, ghiChu: e.target.value })}
+              value={form.moTa}
+              onChange={(e) => setForm({ ...form, moTa: e.target.value })}
             />
           </div>
           <div className="flex justify-end gap-2 mt-4">

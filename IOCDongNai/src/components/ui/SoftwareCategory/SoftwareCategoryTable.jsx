@@ -8,6 +8,7 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 
+// Hàm lấy ngày giờ
 function formatDateTime(dateString) {
   if (!dateString) return "";
   const date = new Date(dateString);
@@ -22,7 +23,7 @@ function formatDateTime(dateString) {
 
 function SoftwareCategoryTable({ data, onEdit, onDelete, onToggleLock }) {
   return (
-    <div className="overflow-x-auto w-full rounded border border-white bg-white">
+    <div className="overflow-x-auto w-full rounded border border-white bg-white ">
       <div className="overflow-y-auto max-h-[420px]">
         <table className="min-w-full text-xs">
           <thead>
@@ -31,10 +32,10 @@ function SoftwareCategoryTable({ data, onEdit, onDelete, onToggleLock }) {
                 STT
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
-                Tên phần mềm
+                Tên danh mục phần mềm
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
-                Mã phần mềm
+                Đơn vị hành chính
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
                 Mô tả
@@ -43,7 +44,7 @@ function SoftwareCategoryTable({ data, onEdit, onDelete, onToggleLock }) {
                 Kích hoạt
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
-                Thời gian tạo mới
+                Thời gian thêm mới
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
                 Thời gian cập nhật
@@ -70,10 +71,10 @@ function SoftwareCategoryTable({ data, onEdit, onDelete, onToggleLock }) {
                     {idx + 1}
                   </td>
                   <td className="px-3 py-2 border-white border">
-                    {row.tenPhanMem}
+                    {row.tenNhom}
                   </td>
                   <td className="px-3 py-2 border-white border">
-                    {row.maPhanMem}
+                    {row.donViHanhChinh}
                   </td>
                   <td className="px-3 py-2 border-white border">{row.moTa}</td>
                   <td className="px-3 py-2 border-white border text-center">

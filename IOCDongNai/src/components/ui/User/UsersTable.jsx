@@ -42,7 +42,7 @@ function UsersTable({ data, onEdit, onDelete, onToggleLock }) {
                 Mã phòng ban
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
-                Mã tổ chức - cơ sở
+                Mã cán bộ
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
                 Thời gian khóa tài khoản

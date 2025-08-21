@@ -3,7 +3,7 @@ import Header from "../../components/ui/Header";
 import Navbar from "../../components/ui/Navbar";
 import Footer from "../../components/ui/Footer";
 import SoftwareCategoryTable from "../../components/ui/SoftwareCategory/SoftwareCategoryTable";
-import SoftwareFormModal from "../../components/ui/SoftwareCategory/SoftwareFormModal";
+import SoftwareCategoryFormModal from "../../components/ui/SoftwareCategory/SoftwareFormModal";
 import ConfirmModal from "../../components/ui/UserGroups/ConfirmModal";
 import PageNavigation from "../../components/ui/PageNavigation";
 import Search from "../../components/ui/Search";
@@ -23,6 +23,7 @@ function SoftwareCategoryManagement() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
   const [pageSize, setPageSize] = useState(10);
   const [filters, setFilters] = useState({
     keyword: "",
@@ -31,9 +32,15 @@ function SoftwareCategoryManagement() {
   // Phân trang
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Lọc dữ liệu theo keyword (tên nhóm hoặc mã nhóm)
   const filteredCategories = categories.filter((c) => {
     const keyword = filters.keyword.trim().toLowerCase();
-    return keyword === "" || c.tenDanhMuc.toLowerCase().includes(keyword);
+    return (
+      keyword === "" ||
+      [c.tenNhom, c.maNhom]
+        .map((v) => (v || "").toLowerCase())
+        .some((v) => v.includes(keyword))
+    );
   });
 
   const totalPages = Math.ceil(filteredCategories.length / pageSize);
@@ -42,7 +49,7 @@ function SoftwareCategoryManagement() {
     currentPage * pageSize
   );
 
-  // Lưu lại vào localStorage
+  // Ghi dữ liệu vào localStorage mỗi khi categories thay đổi
   useEffect(() => {
     localStorage.setItem("softwareCategories", JSON.stringify(categories));
   }, [categories]);
@@ -53,7 +60,12 @@ function SoftwareCategoryManagement() {
       setCategories((prev) =>
         prev.map((c) =>
           c.id === category.id
-            ? { ...c, ...category, updatedAt: new Date().toISOString() }
+            ? {
+                ...c,
+                ...category,
+                locked: category.kichHoat === false ? true : c.locked,
+                updatedAt: new Date().toISOString(),
+              }
             : c
         )
       );
@@ -63,14 +75,14 @@ function SoftwareCategoryManagement() {
         {
           ...category,
           id: Date.now(),
-          locked: false,
+          locked: category.kichHoat === false,
           createdAt: new Date().toISOString(),
         },
       ]);
     }
     setShowFormModal(false);
     setEditingCategory(null);
-    setCurrentPage(1);
+    setCurrentPage(1); // Quay về trang đầu khi thêm mới
   };
 
   // Xóa
@@ -91,7 +103,6 @@ function SoftwareCategoryManagement() {
     <>
       <Header />
       <Navbar />
-
       {/* Page Title */}
       <div
         className={`px-4 py-2 ${
@@ -99,25 +110,24 @@ function SoftwareCategoryManagement() {
         } transition-[margin] duration-300`}
       >
         <h2 className="text-md font-semibold text-red-700">
-          DANH SÁCH DANH MỤC PHẦN MỀM
+          DANH MỤC PHẦN MỀM
         </h2>
       </div>
-
       <div
         className={`px-3 transition-[margin] duration-300 ${
           isOpen ? "ml-64" : "ml-0"
         }`}
       >
-        {/* Search + Add toolbar */}
+        {/* Search + Add toolbar in one row */}
         <div className="flex items-start gap-2 mb-2">
           <div className="flex-1">
             <Search
               fields={[
                 {
                   name: "keyword",
-                  label: "Danh mục",
+                  label: "Từ khóa",
                   type: "text",
-                  placeholder: "Tên danh mục...",
+                  placeholder: "Tên phần mềm...",
                 },
               ]}
               values={filters}
@@ -153,7 +163,6 @@ function SoftwareCategoryManagement() {
           }}
           onToggleLock={handleToggleLock}
         />
-
         <PageNavigation
           currentPage={currentPage}
           totalPages={totalPages}
@@ -161,26 +170,23 @@ function SoftwareCategoryManagement() {
           pageSize={pageSize}
           onPageSizeChange={(size) => {
             setPageSize(size);
-            setCurrentPage(1);
+            setCurrentPage(1); // reset về trang đầu khi đổi pageSize
           }}
           totalItems={filteredCategories.length}
         />
       </div>
-
-      <SoftwareFormModal
+      <SoftwareCategoryFormModal
         open={showFormModal}
         onClose={() => setShowFormModal(false)}
         onSave={handleSave}
         editingCategory={editingCategory}
       />
-
       <ConfirmModal
         open={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleDelete}
-        message="Bạn có chắc chắn muốn xóa danh mục phần mềm này không?"
+        message="Bạn có chắc chắn muốn xóa nhóm phần mềm này không?"
       />
-
       <Footer />
     </>
   );

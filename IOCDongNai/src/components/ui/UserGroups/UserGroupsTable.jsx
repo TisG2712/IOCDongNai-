@@ -8,6 +8,7 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 
+// Hàm lấy ngày giờ
 function formatDateTime(dateString) {
   if (!dateString) return "";
   const date = new Date(dateString);
@@ -34,19 +35,16 @@ function UserGroupsTable({ data, onEdit, onDelete, onToggleLock }) {
                 Tên nhóm người dùng
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
-                Mã nhóm
-              </th>
-              <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
                 Đơn vị hành chính
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
                 Nhóm quyền
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
-                Kích hoạt
+                Mô tả
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
-                Ghi chú
+                Kích hoạt
               </th>
               <th className="sticky top-0 z-10 bg-red-700 px-3 py-2 text-white font-normal border-white border">
                 Thời gian thêm mới
@@ -63,7 +61,7 @@ function UserGroupsTable({ data, onEdit, onDelete, onToggleLock }) {
             {data.length === 0 ? (
               <tr>
                 <td
-                  colSpan={10}
+                  colSpan={9}
                   className="text-center py-4 text-gray-400 border-white border text-xs"
                 >
                   Chưa có dữ liệu
@@ -79,15 +77,15 @@ function UserGroupsTable({ data, onEdit, onDelete, onToggleLock }) {
                     {row.tenNhom}
                   </td>
                   <td className="px-3 py-2 border-white border">
-                    {row.maNhom}
-                  </td>
-                  <td className="px-3 py-2 border-white border">
                     {row.donViHanhChinh}
                   </td>
                   <td className="px-3 py-2 border-white border">
                     {Array.isArray(row.nhomQuyen)
                       ? row.nhomQuyen.join(", ")
                       : row.nhomQuyen}
+                  </td>
+                  <td className="px-3 py-2 border-white border">
+                    {row.moTa ?? ""}
                   </td>
                   <td className="px-3 py-2 border-white border text-center">
                     {row.kichHoat === true ? (
@@ -101,9 +99,6 @@ function UserGroupsTable({ data, onEdit, onDelete, onToggleLock }) {
                         title="Chưa kích hoạt"
                       />
                     )}
-                  </td>
-                  <td className="px-3 py-2 border-white border">
-                    {row.ghiChu}
                   </td>
                   <td className="px-3 py-2 border-white border text-center">
                     {formatDateTime(row.createdAt)}
