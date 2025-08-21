@@ -98,7 +98,7 @@ function UserManagement() {
       {/* Page Title */}
       <div
         className={`px-4 py-2 ${
-          isOpen ? "sm:ml-64" : "ml-0"
+          isOpen ? "ml-64" : "ml-0"
         } transition-[margin] duration-300`}
       >
         <h2 className="text-md font-semibold text-red-700">
@@ -107,12 +107,12 @@ function UserManagement() {
       </div>
       <div
         className={`px-3 transition-[margin] duration-300 ${
-          isOpen ? "sm:ml-64" : "ml-0"
+          isOpen ? "ml-64" : "ml-0"
         }`}
       >
         {/* Search + Add toolbar */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-2 mb-2">
-          <div className="flex-1 min-w-0">
+        <div className="flex items-start gap-2 mb-2">
+          <div className="flex-1">
             <Search
               fields={(() => {
                 const donVis = Array.from(
